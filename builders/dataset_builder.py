@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Tuple, List, Iterator
 
 import numpy as np
 import logging
@@ -14,7 +14,7 @@ class DatasetBuilder:
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger("dataset preparer")
 
-    def prepare_dataset(self, raw_dataset_iterable):
+    def prepare_dataset(self, raw_dataset_iterable: Iterator[Tuple[np.ndarray, int]]):
         
         separated_labels = [list(map(lambda x: x[0], frames)) for _k, frames in itertools.groupby(
             filter(lambda x: x[0] is not None,

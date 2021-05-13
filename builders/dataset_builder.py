@@ -1,9 +1,9 @@
 from typing import Tuple, List, Iterator
-
+from itertools import groupby, filterfalse, starmap
 import numpy as np
 import logging
 import pickle
-import itertools
+
 
 class DatasetBuilder:
     def __init__(self, config):
@@ -16,13 +16,15 @@ class DatasetBuilder:
 
     def prepare_dataset(self, raw_dataset_iterable: Iterator[Tuple[np.ndarray, int]]):
         
-        separated_labels = [list(map(lambda x: x[0], frames)) for _k, frames in itertools.groupby(
-            filter(lambda x: x[0] is not None,
-                sorted([(self.preprocessor.preprocess(frame), label) for frame, label in raw_dataset_iterable], 
-                    key=lambda x: x[1])
-            ),key=lambda x: x[1])
+        separated_labels = [list(map(lambda x: x[0], frames)) for _label, frames in groupby(
+                filterfalse(lambda x: x[0] is None, sorted(
+                        starmap(lambda frame, label: (self.preprocessor.preprocess(frame), label), raw_dataset_iterable), 
+                        key=lambda x: x[1]
+                    )
+                ),
+                key=lambda x: x[1]
+            )
         ]
-
         self.logger.info("Succesfully preprocessed {} frames in total".format(
             sum([len(label_frames) for label_frames in separated_labels])
         ))

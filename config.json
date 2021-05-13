@@ -1,0 +1,16 @@
+{
+    "dataset": {
+        "labels": ["rock", "paper", "scissors"],
+        "paths": ["data/rock.npy", "data/paper.npy", "data/scissors.npy"]
+    },
+
+    "models": {
+        "names": ["logistic_regression", "sgd_classifier", "knn_classifier"],
+        "paths": ["models/logistic_regression.pkl", "models/sgd_classifier.pkl", "models/knn_classifier.pkl"]
+    },
+    
+    "preprocessor": {
+        "name": "mediapipe_preprocessor",
+        "path": "preprocessors/mediapipe_preprocessor.pkl"
+    }
+}

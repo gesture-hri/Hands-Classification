@@ -38,3 +38,15 @@ class ModelBuilderDecorators:
             str(model.score(X_test, y_test))
         ))
         return model
+
+    @ClassDecorators.add_to_class(ModelBuilder)
+    def random_forest(self, X_train, X_test, y_train, y_test, *args):
+        from sklearn.ensemble import RandomForestClassifier
+
+        model = RandomForestClassifier()
+        model.fit(X_train, y_train)
+
+        self.logger.info("Random Forest test set accuracy: {}".format(
+            str(model.score(X_test, y_test))
+        ))
+        return model

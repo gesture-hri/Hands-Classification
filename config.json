@@ -5,8 +5,13 @@
     },
 
     "models": {
-        "names": ["logistic_regression", "sgd_classifier", "knn_classifier"],
-        "paths": ["models/logistic_regression.pkl", "models/sgd_classifier.pkl", "models/knn_classifier.pkl"]
+        "names": ["logistic_regression", "sgd_classifier", "knn_classifier", "random_forest"],
+        "paths": [
+            "models/logistic_regression.pkl", "models/sgd_classifier.pkl", 
+            "models/knn_classifier.pkl", "models/random_forest.pkl"
+        ],
+        "test_size": 0.2,
+        "random_state": 42
     },
     
     "preprocessor": {

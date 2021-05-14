@@ -7,8 +7,9 @@ class ModelBuilder:
     def __init__(self, config):
         self.model_names = config['models']['names']
         self.model_paths = config['models']['paths']
-
         self.data_paths = config['dataset']['paths']
+        self.test_size = config['models']['test_size']
+        self.random_state = config['models']['random_state']
 
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger("model builder")
@@ -19,7 +20,7 @@ class ModelBuilder:
         X = np.concatenate(loaded, axis=0)
         y = np.concatenate([np.full(len(data), i) for i, data in enumerate(loaded)], axis=0)
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=self.test_size, random_state=self.random_state)
 
         models = list(map(lambda x: getattr(self, x)(X_train, X_test, y_train, y_test), self.model_names))
 

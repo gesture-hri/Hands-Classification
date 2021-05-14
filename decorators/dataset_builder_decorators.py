@@ -22,4 +22,4 @@ class DatasetBuilderDecorators:
         :return iterator to tuples of frame/frame sequence and corresponding single label 
         (also in case of frame sequence!)
         '''
-        return self._load_github_dataset()
+        return self._load_tensorflow_dataset()

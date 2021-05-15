@@ -24,7 +24,22 @@ class PreprocessorDecorators:
                 for landmark in hand.landmark
             ]
 
-            return hand_coordinates
+            return np.array(hand_coordinates)
+
+    @ClassDecorators.add_to_class(Preprocessor)
+    def _calculate_angles(self, processed: np.ndarray) -> Union[np.ndarray, None]:
+        if processed is None:
+            return None
+
+        processed = processed / np.linalg.norm(processed, axis=1).reshape(-1, 1)
+        return processed@processed.T
+
+    @ClassDecorators.add_to_class(Preprocessor)
+    def _calculate_distances(self, processed: np.ndarray) -> Union[np.ndarray, None]:
+        if processed is None:
+            return None
+
+        return np.linalg.norm(processed[:, np.newaxis] - processed, axis=2)
 
     @ClassDecorators.add_to_class(Preprocessor)
     def _flatten_frame(self, processed: np.ndarray) -> Union[np.ndarray, None]:
@@ -32,9 +47,7 @@ class PreprocessorDecorators:
 
         if processed is None:
             return None
-        return np.array(list(chain.from_iterable(
-            processed
-        )))
+        return processed.flatten()
 
     @ClassDecorators.add_to_class(Preprocessor)
     def preprocess(self, frame: np.ndarray) -> Union[np.ndarray, None]:
@@ -43,4 +56,6 @@ class PreprocessorDecorators:
         :param frame: image or sequence of images that can be classified
         :return numpy array from preprocessed frame/frame sequence | None if preprocessing failed
         '''
-        return self._flatten_frame(self._mediapipe_process(frame))
+        # return self._flatten_frame(self._mediapipe_process(frame))
+        # return self._flatten_frame(self._calculate_angles(self._mediapipe_process(frame)))
+        # return self._flatten_frame(self._calculate_distances(self._mediapipe_process(frame)))
